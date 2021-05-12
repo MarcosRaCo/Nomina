@@ -72,8 +72,47 @@ public class Querys {
         registros = s.executeUpdate();
         return registros;
     }
-    //PERCEPCIONES
-
+    public String selectDNI() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT DNI_Trabajador FROM Trabajador ");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }
+    public String selectNombreT() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT nombre FROM Trabajador ");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }
+    public String selectCif() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT CIF_Empresa FROM Empresa ");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }
+    public String selectSedeFiscal() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT sedeFiscal FROM Empresa ");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }
+    public String selectNombreEmpresa() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT nombreEmpresa FROM Empresa ");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }public int selectCcc() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT ccc FROM Empresa ");
+        if (r.next()) return (r.getInt(1));
+        else return -1;
+    }
     //Saber idConvenio del trabajador
     public int saberidconTra(String DNITrabajador) throws Exception{
         conn = Conexion.getConnection();
@@ -146,6 +185,10 @@ public class Querys {
         ResultSet rs1 = update.executeQuery("SELECT plus_antiguedad FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1));
         else return 0;
+    }
+    public Date saberFechaActual(){
+        LocalDate fechaActual = LocalDate.now();
+        return Date.valueOf(fechaActual);
     }
     //Calcular dias
     public double calcularAñosAntiguedad(String DNITrabajador) throws Exception {
@@ -245,7 +288,7 @@ public class Querys {
         String valors = obtenerNuevoIDNomina()+", '"+calcularHorasExtra(horas,DNITrabajador)+"', '"+calcularHorasExtrafm(horasfm, DNITrabajador)+"','"+ calcularAñosAntiguedad(DNITrabajador) +"','"+
                 calcularIrpf(horas, horasfm, DNITrabajador)+"','"+calcularFormacion(horas, DNITrabajador)+"','"+calcularDesempleo(horas, DNITrabajador)+"','"+
                 deduccionHorasExtra(horas, DNITrabajador)+"','"+deduccionHorasExtraFM(horasfm, DNITrabajador)+"','"+contingenciasComunes(DNITrabajador)+"','"+
-                saberSalarioBase(DNITrabajador)+"','"+calcularMeritaje(horas,horasfm, DNITrabajador)+"','"+importeLiquidoFinal(horas,horasfm, DNITrabajador)+ "','"+saberidconTra(DNITrabajador)+ "','"+saberDniTra(DNITrabajador) + "'";
+                saberSalarioBase(DNITrabajador)+"','"+calcularMeritaje(horas,horasfm, DNITrabajador)+"','"+ importeLiquidoFinal(horas,horasfm, DNITrabajador) +"','"+ saberFechaActual()+ "','"+saberidconTra(DNITrabajador)+ "','"+saberDniTra(DNITrabajador) +  "','"+selectCif() + "'";
         update.executeUpdate("INSERT INTO Nominas VALUES(" + valors + ")");
     }
 
@@ -325,7 +368,7 @@ public class Querys {
     public double selectIrpf() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT irpf FROM Nominas ORDER Bgit Y idNomina DESC LIMIT 1");
+        ResultSet r = update.executeQuery("SELECT irpf FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
         else return 0;
     }
@@ -341,35 +384,11 @@ public class Querys {
 
     public static void main(String[] args) throws Exception {
         Querys q = new Querys();
-
-//        System.out.println(q.saberidconTra("43479992X"));
-//        System.out.println(q.calcularHorasExtra(15, "43479992X"));
-//        System.out.println(q.calcularHorasExtrafm(1, "43479992X"));
-//
-//
-//        System.out.println(q.calcularGratificacionesExtraordinarias(1, "43479992X"));
-//
-//        System.out.println(q.fechaInicioTrabajador("43479992X"));
-//
-//        System.out.println(q.calcularAñosAntiguedad("43479992X"));
-//        System.out.println(q.saberAñosAntiguedadConvenio("43479992X"));
-//        System.out.println(q.plusAntiguedadPercepcion("43479992X"));
-//            System.out.println(q.salarioBase("43479992X"));
-//            System.out.println(q.salarioBaseMasHorasExtra(2, "43479992X"));
-
-//        System.out.println(q.contingenciasComunes("43479992X"));
-//
-//        System.out.println(q.calcularFormacion(1, "43479992X"));
-//        System.out.println(q.calcularMeritaje(1, 1, "43479992X"));
-        //System.out.println(q.calcularIrpf(1,1,"43479992X"));
-//        System.out.println(q.aportaciones(1,1,"43479992X"));
-//        System.out.println(q.deduccionHorasExtra(1, "43479992X"));
-//        System.out.println(q.deduccionHorasExtraFM(1, "43479992X"));
-        //System.out.println(q.aportaciones(1,1,"43479992X"));
-        //System.out.println(q.totalDeducciones(1,1,"43479992X"));
-        //System.out.println(q.importeLiquidoFinal(1,1,"43479992X"));
-        //q.insertarNomina(1,1,"43479992X");
-        System.out.println(q.selectHorasExtraDeducciones());
-
+        System.out.println(q.saberFechaActual());
+        System.out.println(q.selectNombreEmpresa());
+        System.out.println(q.selectCif());
+        System.out.println(q.selectSedeFiscal());
+        System.out.println(q.selectCcc());
+        System.out.println(q.selectNombreT());
     }
 }

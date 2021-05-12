@@ -1,5 +1,7 @@
 package Tablas;
 
+import java.sql.Date;
+
 /**
  * Tablas
  * Nombre_project: NominasJava-marcos
@@ -22,9 +24,10 @@ public class Nominas {
     private double deduc_horas_extraFM;
     private double contingencias_comunes;
     private double totalMerital;
+    private Date fechaActual;
     private int idConvenio;
     private int dniTrabajador;
-
+    private int cifEpresa;
     public Nominas() {
 
     }
@@ -33,7 +36,7 @@ public class Nominas {
         this.dniTrabajador = dniTrabajador;
     }
 
-    public Nominas(int idNomina, double salarioFinal, double horasExtra, double horasExtraFM, double plusAntiguedad, double gratificacionesExtra, double irpf, double formacion, double desempleo, double deduc_horas_extra, double deduc_horas_extraFM, double contingencias_comunes, double totalMerital, int idConvenio, int dniTrabajador) {
+    public Nominas(int idNomina, double salarioFinal, double horasExtra, double horasExtraFM, double plusAntiguedad, double gratificacionesExtra, double irpf, double formacion, double desempleo, double deduc_horas_extra, double deduc_horas_extraFM, double contingencias_comunes, double totalMerital, Date fechaActual, int idConvenio, int dniTrabajador, int cifEpresa) {
         this.idNomina = idNomina;
         this.salarioFinal = salarioFinal;
         this.horasExtra = horasExtra;
@@ -47,8 +50,10 @@ public class Nominas {
         this.deduc_horas_extraFM = deduc_horas_extraFM;
         this.contingencias_comunes = contingencias_comunes;
         this.totalMerital = totalMerital;
+        this.fechaActual = fechaActual;
         this.idConvenio = idConvenio;
         this.dniTrabajador = dniTrabajador;
+        this.cifEpresa = cifEpresa;
     }
 
     public int getIdNomina() {
@@ -155,6 +160,14 @@ public class Nominas {
         this.totalMerital = totalMerital;
     }
 
+    public Date getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(Date fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+
     public int getIdConvenio() {
         return idConvenio;
     }
@@ -169,6 +182,14 @@ public class Nominas {
 
     public void setDniTrabajador(int dniTrabajador) {
         this.dniTrabajador = dniTrabajador;
+    }
+
+    public int getCifEpresa() {
+        return cifEpresa;
+    }
+
+    public void setCifEpresa(int cifEpresa) {
+        this.cifEpresa = cifEpresa;
     }
 
     @Override
@@ -187,13 +208,10 @@ public class Nominas {
                 ", deduc_horas_extraFM=" + deduc_horas_extraFM +
                 ", contingencias_comunes=" + contingencias_comunes +
                 ", totalMerital=" + totalMerital +
+                ", fechaActual=" + fechaActual +
                 ", idConvenio=" + idConvenio +
                 ", dniTrabajador=" + dniTrabajador +
+                ", cifEpresa=" + cifEpresa +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        Nominas n = new Nominas();
-
     }
 }

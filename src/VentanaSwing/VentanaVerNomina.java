@@ -5,6 +5,12 @@ import Tablas.Querys;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * VentanaSwing
@@ -43,6 +49,18 @@ public class VentanaVerNomina extends JFrame {
     private JLabel meritaciones;
     private JLabel deducciones;
     private JButton exportarXMLButton;
+    private JTextField textFieldCif;
+    private JLabel cif;
+    private JTextField textFieldFA;
+    private JLabel fa;
+    private JLabel nt;
+    private JTextField textFieldNombreT;
+    private JTextField textFieldDni;
+    private JLabel dni;
+    private JTextField textFieldCcc;
+    private JTextField textFieldNombreEmpresa;
+    private JLabel empresa;
+    private JLabel ccc;
 
     public void ColocarVentana(){
         //Esto te dice la resolución de tu pantalla, lo grande que es
@@ -75,7 +93,12 @@ public class VentanaVerNomina extends JFrame {
         String shedfm = String.valueOf(q.selectHorasExtraFMDeducciones());
         String sirpf = String.valueOf(q.selectIrpf());
         String ssf = String.valueOf(q.selectSalarioFinal());
-
+        String dni = String.valueOf(q.selectDNI());
+        String cif = String.valueOf(q.selectCif());
+        String nt = String.valueOf(q.selectNombreT());
+        String fa = String.valueOf(q.saberFechaActual());
+        String ne = String.valueOf(q.selectNombreEmpresa());
+        String ccc = String.valueOf(q.selectCcc());
         textFieldSalarioBase.setText(ssb);
         textFieldAntigüedad.setText(sa);
         textFieldHExtra.setText(she);
@@ -90,7 +113,77 @@ public class VentanaVerNomina extends JFrame {
         textFieldHExtraFMD.setText(shedfm);
         textFieldIRPF.setText(sirpf);
         textFieldSalarioFinal.setText(ssf);
+        textFieldDni.setText(dni);
+        textFieldCif.setText(cif);
+        textFieldNombreT.setText(nt);
+        textFieldFA.setText(fa);
+        textFieldCcc.setText(ccc);
+        textFieldNombreEmpresa.setText(ne);
 
+        exportarXMLButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BufferedWriter bw = null;
+                try {
+                    String mycontent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                            "<nominas>\n" +
+                            "  <nomina >\n" +
+                            "      <trabajador>\n" +
+                            "        <nombreTrabajador>"+ textFieldNombreT.getText() + "</nombreTrabajador>\n" +
+                            "        <dni>"+textFieldDni.getText() +"</dni>\n" +
+                            "      </trabajador>\n" +
+                            "      <empresa>\n" +
+                            "        <cif>" + textFieldCif.getText()+ "</cif>\n" +
+                            "        <nombreEmpresa>" +textFieldNombreEmpresa.getText() + "</nombreEmpresa>\n" +
+                            "      </empresa>\n" +
+                            "      <percepciones>\n" +
+                            "        <salario_base>" +textFieldSalarioBase.getText() + "</salario_base>\n" +
+                            "        <antiguedad>" + textFieldAntigüedad.getText() + "</antiguedad>\n" +
+                            "        <horas_extra>"+ textFieldHExtra.getText() + "</horas_extra>\n" +
+                            "        <horas_extraFM>"+ textFieldHExtraFM.getText()+"</horas_extraFM>\n" +
+                            "      </percepciones>\n" +
+                            "      <total_meritado>" + textFieldTotalMerital.getText() + "</total_meritado>\n" +
+                            "      <deducciones>\n" +
+                            "        <contingencias_comunes>" +textFieldContingénciasComunes.getText() + "</contingencias_comunes>\n" +
+                            "        <desempleo>" + textFieldDesempleo.getText()+ "</desempleo>\n" +
+                            "        <formacion>" + textFieldFomacion.getText()+ "</formacion>\n" +
+                            "        <deducciones_horas_extra>" + textFieldHExtraDeduc.getText()+ "</deducciones_horas_extra>\n" +
+                            "        <deducciones_horas_extraFM>" + textFieldHExtraFMD.getText() + "</deducciones_horas_extraFM>\n" +
+                            "        <irpf>" + textFieldIRPF.getText() + "</irpf>\n" +
+                            "      </deducciones> \n" +
+                            "      <salario_final>" + textFieldSalarioFinal.getText() + "</salario_final>\n" +
+                            "  </nomina>\n" +
+                            "</nominas>";
+                    //Specify the file name and path here
+
+                    String path = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\xml\\";
+                    String nombreFichero = "nomina_"+ textFieldDni.getText()+"_"+textFieldFA.getText() + ".xml";
+                    File file = new File(path + nombreFichero);
+
+                    /* This logic will make sure that the file
+                     * gets created if it is not present at the
+                     * specified location*/
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+
+                    FileWriter fw = new FileWriter(file);
+                    bw = new BufferedWriter(fw);
+                    bw.write(mycontent);
+                    System.out.println("File written Successfully");
+
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                } finally {
+                    try {
+                        if (bw != null)
+                            bw.close();
+                    } catch (Exception ex) {
+                        System.out.println("Error in closing the BufferedWriter" + ex);
+                    }
+                }
+            }
+        });
     }
     public static void NewWindowsVerNomina() throws Exception {
         VentanaVerNomina vvn = new VentanaVerNomina();
@@ -104,5 +197,6 @@ public class VentanaVerNomina extends JFrame {
         vvn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vvn.pack();
         vvn.setVisible(true);
+
     }
 }
