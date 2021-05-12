@@ -127,7 +127,7 @@ public class VentanaVerNomina extends JFrame {
                 try {
                     String mycontent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                             "<nominas>\n" +
-                            "  <nomina >\n" +
+                            "  <nomina>\n" +
                             "      <trabajador>\n" +
                             "        <nombreTrabajador>"+ textFieldNombreT.getText() + "</nombreTrabajador>\n" +
                             "        <dni>"+textFieldDni.getText() +"</dni>\n" +
@@ -154,9 +154,10 @@ public class VentanaVerNomina extends JFrame {
                             "      <salario_final>" + textFieldSalarioFinal.getText() + "</salario_final>\n" +
                             "  </nomina>\n" +
                             "</nominas>";
-                    //Specify the file name and path here
 
-                    String path = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\xml\\";
+                    //Ruta
+                    String path = "src\\xml\\";
+                    //Nombre del fichero
                     String nombreFichero = "nomina_"+ textFieldDni.getText()+"_"+textFieldFA.getText() + ".xml";
                     File file = new File(path + nombreFichero);
 
