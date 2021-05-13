@@ -86,7 +86,7 @@ public class VentanaVerNomina extends JFrame {
         setLocation(anchoPantalla/4, alturaPantalla/4);
     }
 
-    public VentanaVerNomina(String dni) throws Exception {
+    public VentanaVerNomina() throws Exception {
         ColocarVentana();
         setResizable(false);
         Querys q = new Querys();
@@ -227,8 +227,8 @@ public class VentanaVerNomina extends JFrame {
         });
     }
     public void NewWindowsVerNomina() throws Exception {
-        VentanaVerNomina vvn = new VentanaVerNomina(vn.dni);
-        vvn.setContentPane(new VentanaVerNomina(vn.dni).panelVerNomina);
+        VentanaVerNomina vvn = new VentanaVerNomina();
+        vvn.setContentPane(new VentanaVerNomina().panelVerNomina);
         vvn.pack();
         vvn.setVisible(true);
     }

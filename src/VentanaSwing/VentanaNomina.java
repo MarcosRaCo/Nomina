@@ -29,8 +29,6 @@ public class VentanaNomina extends JFrame {
     private JLabel HorasExtra;
     private JLabel HorasExtraFM;
     private JButton calcularButton;
-
-    String dni;
     Connection conn;
 
     public void selectVentanaNomina(){
@@ -58,13 +56,13 @@ public class VentanaNomina extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String horas = textFieldHorasExtra.getText();
                 String horasfm = textFieldHorasExtraFM.getText();
-                dni = (String) comboBoxDNI.getSelectedItem();
+                String dni = (String) comboBoxDNI.getSelectedItem();
                 Querys q = new Querys();
                 int horasParse = Integer.parseInt(horas);
                 int horasFMParse = Integer.parseInt(horasfm);
                 try {
                     q.insertarNomina(horasParse,horasFMParse,dni);
-                    VentanaVerNomina vvn = new VentanaVerNomina(dni);
+                    VentanaVerNomina vvn = new VentanaVerNomina();
                     vvn.NewWindowsVerNomina();
                 } catch (Exception exception) {
                     exception.printStackTrace();
