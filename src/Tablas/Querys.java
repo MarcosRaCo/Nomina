@@ -22,9 +22,7 @@ public class Querys {
     private static final String SQL_SELECT_DNI = "SELECT * FROM Trabajador WHERE DNI_Trabajador = ?";
     Connection conn;
 
-    private void mostrarDatos(String datos) throws IOException {
-        System.out.print(datos);
-    }
+
     public List<Trabajador> select() throws SQLException, IOException {
         Connection conn = null;
         PreparedStatement s = null;
@@ -48,7 +46,6 @@ public class Querys {
             int idConvenio = r.getInt("idConvenio");
             trabajador = new Trabajador(DNI_Trabajador, nombre, apellido,apellido2, fechaInicio,edad, puesto,irpf, idConvenio);
             trabajadores.add(trabajador);
-            mostrarDatos("Trabajador Seleccionado correctamente");
         }
         return trabajadores;
     }
@@ -79,10 +76,10 @@ public class Querys {
         if (r.next()) return (r.getString(1));
         else return "Error";
     }
-    public String selectNombreT() throws Exception {
+    public String selectNombreT(String DNITrabajador) throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT nombre FROM Trabajador ");
+        ResultSet r = update.executeQuery("SELECT nombre FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
         if (r.next()) return (r.getString(1));
         else return "Error";
     }
@@ -119,7 +116,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT idConvenio FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
         if (r.next()) return (r.getInt(1));
-        else return 0;
+        else return -1;
     }
 
     //Saber DNI Trabajador
@@ -133,7 +130,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
 
 
@@ -143,7 +140,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT horasExtra FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1) * horas);
-        else return 0;
+        else return -1;
     }
 
     // Intento Calculo horas extra percepciones
@@ -152,7 +149,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT horasExtraFuerzaMayor FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1) * horas);
-        else return 0;
+        else return -1;
     }
 
     //Genera un nuevo id a nomina para la hora de añadirlo
@@ -161,7 +158,7 @@ public class Querys {
         Statement cercaMaxId = conn.createStatement();
         ResultSet r = cercaMaxId.executeQuery("SELECT MAX(idNomina) FROM Nominas");
         if (r.next()) return (1 + r.getInt(1));
-        else return 1;
+        else return -1;
     }
 
     public int saberAñosAntiguedadConvenio(String DNITrabajador) throws Exception {
@@ -169,7 +166,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT años_antiguedad FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getInt(1));
-        else return 0;
+        else return -1;
     }
     public String fechaInicioTrabajador(String DNITrabajador) throws Exception{
         conn = Conexion.getConnection();
@@ -184,7 +181,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT plus_antiguedad FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public Date saberFechaActual(){
         LocalDate fechaActual = LocalDate.now();
@@ -211,7 +208,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double salarioBaseMasHorasExtra(double horas ,String DNITrabajador) throws Exception {
         return salarioBase(DNITrabajador) + calcularHorasExtra(horas, DNITrabajador);
@@ -221,7 +218,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT contingencias_comunes FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1) * salarioBase(DNITrabajador) / 100);
-        else return 0;
+        else return -1;
 
     }
     public double calcularDesempleo(double horas ,String DNITrabajador) throws Exception {
@@ -229,14 +226,14 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT Desempleo FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
-        else return 0;
+        else return -1;
     }
     public double calcularFormacion(double horas ,String DNITrabajador) throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet rs1 = update.executeQuery("SELECT formacion FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
-        else return 0;
+        else return -1;
     }
 
     public double calcularMeritaje(double horas, double horasFM, String DNITrabajador) throws Exception {
@@ -249,21 +246,21 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT irpf FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
         if (r.next()) return (r.getInt(1) * calcularMeritaje(horas,  horasFM, DNITrabajador) / 100);
-        else return 0;
+        else return -1;
     }
     public double deduccionHorasExtra(double horas, String DNITrabajador) throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT horas_extra FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (r.next()) return (r.getInt(1) * calcularHorasExtra(horas, DNITrabajador) / 100);
-        else return 0;
+        else return -1;
     }
     public double deduccionHorasExtraFM(double horas, String DNITrabajador) throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT horas_extra_fm FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
         if (r.next()) return (r.getInt(1) * calcularHorasExtrafm(horas, DNITrabajador) / 100);
-        else return 0;
+        else return -1;
     }
 
     public double aportaciones(double horas,double horasFM, String DNITrabajador) throws Exception {
@@ -281,6 +278,49 @@ public class Querys {
         return redondeado;
     }
 
+
+
+
+
+
+
+
+    public String selectTrabajadorPorDNI(String DNITrabajador) throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT nombre FROM trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'" );
+        if (r.next()) return (r.getString(1));
+        else return "Errooor";
+    }
+    public String selectTrabajadorPorDNInomina() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT nombreT FROM Nominas ORDER BY idNomina DESC LIMIT 1");
+        if (r.next()) return (r.getString(1));
+        else return "Errooor";
+    }
+
+    public String selectDNInomina() throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT DNItrabajdor FROM Nominas ORDER BY idNomina DESC LIMIT 1");
+        if (r.next()) return (r.getString(1));
+        else return "Errooor";
+    }
+    public String selectApellidoPorDNI(String DNITrabajador) throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT apellido FROM trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'" );
+        if (r.next()) return (r.getString(1));
+        else return "Errooor";
+    }
+    public String selectPuestoPorDNI(String DNITrabajador) throws Exception {
+        conn = Conexion.getConnection();
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT puesto FROM trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'" );
+        if (r.next()) return (r.getString(1));
+        else return "Errooor";
+    }
     //Insertar en nomina
     public void insertarNomina(double horas, double horasfm, String DNITrabajador) throws Exception{
         conn = Conexion.getConnection();
@@ -288,7 +328,8 @@ public class Querys {
         String valors = obtenerNuevoIDNomina()+", '"+calcularHorasExtra(horas,DNITrabajador)+"', '"+calcularHorasExtrafm(horasfm, DNITrabajador)+"','"+ calcularAñosAntiguedad(DNITrabajador) +"','"+
                 calcularIrpf(horas, horasfm, DNITrabajador)+"','"+calcularFormacion(horas, DNITrabajador)+"','"+calcularDesempleo(horas, DNITrabajador)+"','"+
                 deduccionHorasExtra(horas, DNITrabajador)+"','"+deduccionHorasExtraFM(horasfm, DNITrabajador)+"','"+contingenciasComunes(DNITrabajador)+"','"+
-                saberSalarioBase(DNITrabajador)+"','"+calcularMeritaje(horas,horasfm, DNITrabajador)+"','"+ importeLiquidoFinal(horas,horasfm, DNITrabajador) +"','"+ saberFechaActual()+ "','"+saberidconTra(DNITrabajador)+ "','"+saberDniTra(DNITrabajador) +  "','"+selectCif() + "'";
+                saberSalarioBase(DNITrabajador)+"','"+calcularMeritaje(horas,horasfm, DNITrabajador)+"','"+importeLiquidoFinal(horas,horasfm, DNITrabajador)+ "','"+saberidconTra(DNITrabajador)+ "','"+saberDniTra(DNITrabajador) + "','"+
+                saberFechaActual() + "','"+ salarioBaseMasHorasExtra(horas, DNITrabajador) + "','" + selectTrabajadorPorDNI(DNITrabajador) +  "','" + selectApellidoPorDNI(DNITrabajador) +  "','" + selectPuestoPorDNI(DNITrabajador) + "'";
         update.executeUpdate("INSERT INTO Nominas VALUES(" + valors + ")");
     }
 
@@ -297,7 +338,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT salari_base FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
 
     public double selectAntiguadad() throws Exception {
@@ -305,7 +346,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT plus_antiguedad FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
 
     public double selectHorasExtraFM() throws Exception {
@@ -313,7 +354,7 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT horas_extra_fm FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
 
     public double selectTotalMerital() throws Exception {
@@ -321,74 +362,68 @@ public class Querys {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT total_merital FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectHorasExtra() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT horas_extra FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectContingenciasComunes() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT contingencias_comunes FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectDesempleo() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT desempleo FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectFormacion() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT formacion FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectHorasExtraDeducciones() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT deduc_horas_extra FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectHorasExtraFMDeducciones() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT deduc_horas_extraFM FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectIrpf() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT irpf FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
     public double selectSalarioFinal() throws Exception {
         conn = Conexion.getConnection();
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT salario_final FROM Nominas ORDER BY idNomina DESC LIMIT 1");
         if (r.next()) return (r.getDouble(1));
-        else return 0;
+        else return -1;
     }
-
-    //
 
     public static void main(String[] args) throws Exception {
         Querys q = new Querys();
-        System.out.println(q.saberFechaActual());
-        System.out.println(q.selectNombreEmpresa());
-        System.out.println(q.selectCif());
-        System.out.println(q.selectSedeFiscal());
-        System.out.println(q.selectCcc());
-        System.out.println(q.selectNombreT());
+        System.out.println(q.selectTrabajadorPorDNI("43479992X"));
     }
+
 }

@@ -25,5 +25,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-beanutils-1.9.0" level="project" />
+    <orderEntry type="library" name="commons-collections4-4.2" level="project" />
+    <orderEntry type="library" name="commons-beanutils-1.9.01" level="project" />
   </component>
 </module>

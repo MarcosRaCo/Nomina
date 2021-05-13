@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 /**
  * VentanaSwing
@@ -27,6 +28,7 @@ public class VentanaMadre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 VentanaConsulta vc = new VentanaConsulta();
                 vc.NewWindowsConsulta();
+                dispose();
             }
         });
         insertarTrabajadorButton.addActionListener(new ActionListener() {
@@ -34,6 +36,7 @@ public class VentanaMadre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 VentanaInsertTra vit = new VentanaInsertTra();
                 vit.NewWindowsInsertTra();
+                dispose();
             }
         });
         calcularNominasButton.addActionListener(new ActionListener() {
@@ -41,6 +44,7 @@ public class VentanaMadre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 VentanaNomina vn = new VentanaNomina();
                 vn.NewWindowsNomina();
+                dispose();
             }
         });
     }

@@ -30,6 +30,7 @@ public class VentanaNomina extends JFrame {
     private JLabel HorasExtraFM;
     private JButton calcularButton;
 
+    String dni;
     Connection conn;
 
     public void selectVentanaNomina(){
@@ -37,9 +38,10 @@ public class VentanaNomina extends JFrame {
         try{
             conn = Conexion.getConnection();
             Statement update = conn.createStatement();
-            ResultSet r = update.executeQuery("SELECT * FROM Trabajador ");
+            ResultSet r = update.executeQuery("SELECT * FROM Trabajador");
             while (r.next()){
                 this.comboBoxDNI.addItem(r.getString("DNI_Trabajador"));
+
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, e);
@@ -56,21 +58,20 @@ public class VentanaNomina extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String horas = textFieldHorasExtra.getText();
                 String horasfm = textFieldHorasExtraFM.getText();
-                String DNI = (String) comboBoxDNI.getSelectedItem();
+                dni = (String) comboBoxDNI.getSelectedItem();
                 Querys q = new Querys();
                 int horasParse = Integer.parseInt(horas);
                 int horasFMParse = Integer.parseInt(horasfm);
                 try {
-                    q.insertarNomina(horasParse,horasFMParse,DNI);
-                    VentanaVerNomina vvn = new VentanaVerNomina();
+                    q.insertarNomina(horasParse,horasFMParse,dni);
+                    VentanaVerNomina vvn = new VentanaVerNomina(dni);
                     vvn.NewWindowsVerNomina();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
 
-                Nominas n = new Nominas();
-                textFieldHorasExtra.setText(null);
-                textFieldHorasExtraFM.setText(null);
+                //textFieldHorasExtra.setText(null);
+                //textFieldHorasExtraFM.setText(null);
 
 
             }

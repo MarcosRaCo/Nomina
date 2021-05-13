@@ -1,7 +1,9 @@
 package VentanaSwing;
 
-import Tablas.Nominas;
+import BD.Conexion;
 import Tablas.Querys;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +13,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * VentanaSwing
@@ -61,6 +67,10 @@ public class VentanaVerNomina extends JFrame {
     private JTextField textFieldNombreEmpresa;
     private JLabel empresa;
     private JLabel ccc;
+    private JButton exportButton;
+    private JButton pdfButton;
+    private JButton csvButton;
+    VentanaNomina vn = new VentanaNomina();
 
     public void ColocarVentana(){
         //Esto te dice la resolución de tu pantalla, lo grande que es
@@ -76,16 +86,17 @@ public class VentanaVerNomina extends JFrame {
         setLocation(anchoPantalla/4, alturaPantalla/4);
     }
 
-    public VentanaVerNomina() throws Exception {
+    public VentanaVerNomina(String dni) throws Exception {
         ColocarVentana();
         setResizable(false);
         Querys q = new Querys();
+
         String ssb = String.valueOf(q.selectSalarioBase());
         String sa = String.valueOf(q.selectAntiguadad());
         String she = String.valueOf(q.selectHorasExtra());
         String shefm = String.valueOf(q.selectHorasExtraFM());
         String stm = String.valueOf(q.selectTotalMerital());
-
+        System.out.println(dni);
         String scg = String.valueOf(q.selectContingenciasComunes());
         String sd = String.valueOf(q.selectDesempleo());
         String sf = String.valueOf(q.selectFormacion());
@@ -93,9 +104,14 @@ public class VentanaVerNomina extends JFrame {
         String shedfm = String.valueOf(q.selectHorasExtraFMDeducciones());
         String sirpf = String.valueOf(q.selectIrpf());
         String ssf = String.valueOf(q.selectSalarioFinal());
-        String dni = String.valueOf(q.selectDNI());
+
+
+        String nt = String.valueOf(q.selectTrabajadorPorDNInomina());
+
         String cif = String.valueOf(q.selectCif());
-        String nt = String.valueOf(q.selectNombreT());
+
+        String dniT = String.valueOf(q.selectDNInomina());
+
         String fa = String.valueOf(q.saberFechaActual());
         String ne = String.valueOf(q.selectNombreEmpresa());
         String ccc = String.valueOf(q.selectCcc());
@@ -113,7 +129,7 @@ public class VentanaVerNomina extends JFrame {
         textFieldHExtraFMD.setText(shedfm);
         textFieldIRPF.setText(sirpf);
         textFieldSalarioFinal.setText(ssf);
-        textFieldDni.setText(dni);
+        textFieldDni.setText(String.valueOf(dniT));
         textFieldCif.setText(cif);
         textFieldNombreT.setText(nt);
         textFieldFA.setText(fa);
@@ -124,6 +140,7 @@ public class VentanaVerNomina extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 BufferedWriter bw = null;
+
                 try {
                     String mycontent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                             "<nominas>\n" +
@@ -185,19 +202,42 @@ public class VentanaVerNomina extends JFrame {
                 }
             }
         });
-    }
-    public static void NewWindowsVerNomina() throws Exception {
-        VentanaVerNomina vvn = new VentanaVerNomina();
-        vvn.setContentPane(new VentanaVerNomina().panelVerNomina);
-        vvn.pack();
-        vvn.setVisible(true);
-    }
-    public static void main(String[] args) throws Exception {
-        VentanaVerNomina vvn = new VentanaVerNomina();
-        vvn.setContentPane(new VentanaVerNomina().panelVerNomina);
-        vvn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        vvn.pack();
-        vvn.setVisible(true);
 
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Connection conn = Conexion.getConnection();
+                        String reportSrcFile = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\src\\jasperReports\\nominasMarcosMiguel.jrxml";
+
+                        JasperReport jasperReport = null;
+                        jasperReport = JasperCompileManager.compileReport(reportSrcFile);
+
+                        Map<String, Object> parameters = new HashMap<String, Object>();
+
+                        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, conn);
+
+                        JasperViewer jw = new JasperViewer(print, false);
+                        jw.setVisible(true);
+                    }catch (JRException | SQLException jrException) {
+                        jrException.printStackTrace();
+                        System.out.println("Error");
+                    }
+                }
+        });
     }
+    public void NewWindowsVerNomina() throws Exception {
+        VentanaVerNomina vvn = new VentanaVerNomina(vn.dni);
+        vvn.setContentPane(new VentanaVerNomina(vn.dni).panelVerNomina);
+        vvn.pack();
+        vvn.setVisible(true);
+    }
+//    public static void main(String[] args) throws Exception {
+//        VentanaVerNomina vvn = new VentanaVerNomina();
+//        vvn.setContentPane(new VentanaVerNomina().panelVerNomina);
+//        vvn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        vvn.pack();
+//        vvn.setVisible(true);
+//
+//    }
 }
