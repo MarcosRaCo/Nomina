@@ -76,22 +76,7 @@ public class Querys {
         return registros;
     }
 
-    public String selectDNI() throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT DNI_Trabajador FROM Trabajador ");
-        if (r.next()) return (r.getString(1));
-        else return "Error";
-    }
-
-    public String selectNombreT(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT nombre FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
-        if (r.next()) return (r.getString(1));
-        else return "Error";
-    }
-
+    /** SELECT FORMAR NOMINA **/
     public String selectCif() throws Exception {
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT CIF_Empresa FROM Empresa ");
@@ -99,13 +84,6 @@ public class Querys {
         else return "Error";
     }
 
-    public String selectSedeFiscal() throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT sedeFiscal FROM Empresa ");
-        if (r.next()) return (r.getString(1));
-        else return "Error";
-    }
 
     public String selectNombreEmpresa() throws Exception {
 
@@ -122,193 +100,7 @@ public class Querys {
         if (r.next()) return (r.getInt(1));
         else return -1;
     }
-
-    //Saber idConvenio del trabajador
-    public int saberidconTra(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT idConvenio FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
-        if (r.next()) return (r.getInt(1));
-        else return -1;
-    }
-
-    //Saber DNI Trabajador
-    public String saberDniTra(String DNITrabajador) throws Exception {
-        return DNITrabajador;
-    }
-
-    //Sabe SalarioBase
-    public double saberSalarioBase(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
-        if (r.next()) return (r.getDouble(1));
-        else return -1;
-    }
-
-
-    // Intento Calculo horas extra percepciones
-    public double calcularHorasExtra(double horas, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT horasExtra FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1) * horas);
-        else return -1;
-    }
-
-    // Intento Calculo horas extra percepciones
-    public double calcularHorasExtrafm(double horas, String DNITrabajador) throws Exception {
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT horasExtraFuerzaMayor FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1) * horas);
-        else return -1;
-    }
-
-    //Genera un nuevo id a nomina para la hora de añadirlo
-    public int obtenerNuevoIDNomina() throws Exception {
-        //Cercar ID maxim Nomina
-        Statement cercaMaxId = conn.createStatement();
-        ResultSet r = cercaMaxId.executeQuery("SELECT MAX(idNomina) FROM Nominas");
-        if (r.next()) return (1 + r.getInt(1));
-        else return -1;
-    }
-
-    public int saberAñosAntiguedadConvenio(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT años_antiguedad FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getInt(1));
-        else return -1;
-    }
-
-    public String fechaInicioTrabajador(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT fechaInicio FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
-        if (r.next()) return (r.getString(1));
-        else return "Error";
-    }
-
-    public double plusAntiguedadPercepcion(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT plus_antiguedad FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1));
-        else return -1;
-    }
-
-    public Date saberFechaActual() {
-        LocalDate fechaActual = LocalDate.now();
-        return Date.valueOf(fechaActual);
-    }
-
-    //Calcular dias
-    public double calcularAñosAntiguedad(String DNITrabajador) throws Exception {
-        String fecha = fechaInicioTrabajador(DNITrabajador);
-        LocalDate fechaInicio = LocalDate.parse(fecha);
-        LocalDate fechaActual = LocalDate.now();
-
-        long diasEntreFechas = ChronoUnit.DAYS.between(fechaInicio, fechaActual);
-
-        int dias = (int) diasEntreFechas;
-        double r = dias / 365;
-        if (r >= 3) {
-            r = r / saberAñosAntiguedadConvenio(DNITrabajador);
-            r = r * plusAntiguedadPercepcion(DNITrabajador);
-            return r;
-        }else{
-            return 0;
-        }
-
-    }
-
-    //Deducciones
-    public double salarioBase(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1));
-        else return -1;
-    }
-
-    public double salarioBaseMasHorasExtra(double horas, String DNITrabajador) throws Exception {
-        return salarioBase(DNITrabajador) + calcularHorasExtra(horas, DNITrabajador);
-    }
-
-    public double contingenciasComunes(String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT contingencias_comunes FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1) * salarioBase(DNITrabajador) / 100);
-        else return -1;
-
-    }
-
-    public double calcularDesempleo(double horas, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT Desempleo FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
-        else return -1;
-    }
-
-    public double calcularFormacion(double horas, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet rs1 = update.executeQuery("SELECT formacion FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
-        else return -1;
-    }
-
-    public double calcularMeritaje(double horas, double horasFM, String DNITrabajador) throws Exception {
-        return salarioBase(DNITrabajador) + calcularHorasExtra(horas, DNITrabajador) + calcularHorasExtrafm(horasFM, DNITrabajador) + calcularAñosAntiguedad(DNITrabajador);
-
-    }
-
-    public double calcularIrpf(double horas, double horasFM, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT irpf FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
-        if (r.next()) return (r.getInt(1) * calcularMeritaje(horas, horasFM, DNITrabajador) / 100);
-        else return -1;
-    }
-
-    public double deduccionHorasExtra(double horas, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT horas_extra FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (r.next()) return (r.getInt(1) * calcularHorasExtra(horas, DNITrabajador) / 100);
-        else return -1;
-    }
-
-    public double deduccionHorasExtraFM(double horas, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        ResultSet r = update.executeQuery("SELECT horas_extra_fm FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
-        if (r.next()) return (r.getInt(1) * calcularHorasExtrafm(horas, DNITrabajador) / 100);
-        else return -1;
-    }
-
-    public double aportaciones(double horas, double horasFM, String DNITrabajador) throws Exception {
-        return contingenciasComunes(DNITrabajador) + calcularDesempleo(horas, DNITrabajador) + calcularFormacion(horas, DNITrabajador) + deduccionHorasExtraFM(horasFM, DNITrabajador) + deduccionHorasExtra(horas, DNITrabajador);
-    }
-
-    public double totalDeducciones(double horas, double horasFM, String DNITrabajador) throws Exception {
-        DecimalFormat formato = new DecimalFormat("0.00");
-        double r = aportaciones(horas, horasFM, DNITrabajador) + calcularIrpf(horas, horasFM, DNITrabajador);
-        double redondeado = Math.round(r * 100.0) / 100.0;
-        return redondeado;
-    }
-
-    public double importeLiquidoFinal(double horas, double horasFM, String DNITrabajador) throws Exception {
-        double r = calcularMeritaje(horas, horasFM, DNITrabajador) - totalDeducciones(horas, horasFM, DNITrabajador);
-        double redondeado = Math.round(r * 100.0) / 100.0;
-        return redondeado;
-    }
-
-
     public String selectTrabajadorPorDNI(String DNITrabajador) throws Exception {
-
         Statement update = conn.createStatement();
         ResultSet r = update.executeQuery("SELECT nombre FROM trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
         if (r.next()) return (r.getString(1));
@@ -344,19 +136,6 @@ public class Querys {
         if (r.next()) return (r.getString(1));
         else return "Errooor";
     }
-
-    //Insertar en nomina
-    public void insertarNomina(double horas, double horasfm, String DNITrabajador) throws Exception {
-
-        Statement update = conn.createStatement();
-        String valors = obtenerNuevoIDNomina() + ", '" + calcularHorasExtra(horas, DNITrabajador) + "', '" + calcularHorasExtrafm(horasfm, DNITrabajador) + "','" + calcularAñosAntiguedad(DNITrabajador) + "','" +
-                calcularIrpf(horas, horasfm, DNITrabajador) + "','" + calcularFormacion(horas, DNITrabajador) + "','" + calcularDesempleo(horas, DNITrabajador) + "','" +
-                deduccionHorasExtra(horas, DNITrabajador) + "','" + deduccionHorasExtraFM(horasfm, DNITrabajador) + "','" + contingenciasComunes(DNITrabajador) + "','" +
-                saberSalarioBase(DNITrabajador) + "','" + calcularMeritaje(horas, horasfm, DNITrabajador) + "','" + importeLiquidoFinal(horas, horasfm, DNITrabajador) + "','" + saberidconTra(DNITrabajador) + "','" + saberDniTra(DNITrabajador) + "','" +
-                saberFechaActual() + "','" + salarioBaseMasHorasExtra(horas, DNITrabajador) + "','" + selectTrabajadorPorDNI(DNITrabajador) + "','" + selectApellidoPorDNI(DNITrabajador) + "','" + selectPuestoPorDNI(DNITrabajador) + "'";
-        update.executeUpdate("INSERT INTO Nominas VALUES(" + valors + ")");
-    }
-
     public double selectSalarioBase() throws Exception {
 
         Statement update = conn.createStatement();
@@ -453,11 +232,194 @@ public class Querys {
         else return -1;
     }
 
-    public static void main(String[] args) throws Exception {
-        Querys q = new Querys();
-        System.out.println(q.calcularAñosAntiguedad("43479992X"));
-        System.out.println(q.plusAntiguedadPercepcion("43479992X"));
-        System.out.println(q.saberAñosAntiguedadConvenio("43479992X"));
+    /** Obtener informacion **/
+    //Saber idConvenio del trabajador
+    public int saberidconTra(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT idConvenio FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
+        if (r.next()) return (r.getInt(1));
+        else return -1;
     }
 
+    //Saber DNI Trabajador
+    public String saberDniTra(String DNITrabajador) throws Exception {
+        return DNITrabajador;
+    }
+
+    //Saber SalarioBase
+    public double saberSalarioBase(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
+        if (r.next()) return (r.getDouble(1));
+        else return -1;
+    }
+
+    public int saberAñosAntiguedadConvenio(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT años_antiguedad FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getInt(1));
+        else return -1;
+    }
+    public double salarioBase(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT salarioBase FROM Convenio WHERE id = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1));
+        else return -1;
+    }
+    public String fechaInicioTrabajador(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT fechaInicio FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
+        if (r.next()) return (r.getString(1));
+        else return "Error";
+    }
+    /** Calculos **/
+    //Calculo horas extra percepciones
+    public double calcularHorasExtra(double horas, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT horasExtra FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1) * horas);
+        else return -1;
+    }
+
+    //Calculo horas extra percepciones
+    public double calcularHorasExtrafm(double horas, String DNITrabajador) throws Exception {
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT horasExtraFuerzaMayor FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1) * horas);
+        else return -1;
+    }
+
+    //Genera un nuevo id a nomina para la hora de añadirlo
+    public int obtenerNuevoIDNomina() throws Exception {
+        //Cercar ID maxim Nomina
+        Statement cercaMaxId = conn.createStatement();
+        ResultSet r = cercaMaxId.executeQuery("SELECT MAX(idNomina) FROM Nominas");
+        if (r.next()) return (1 + r.getInt(1));
+        else return -1;
+    }
+
+    public double plusAntiguedadPercepcion(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT plus_antiguedad FROM Percepciones_Salariales WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1));
+        else return -1;
+    }
+
+    public Date saberFechaActual() {
+        LocalDate fechaActual = LocalDate.now();
+        return Date.valueOf(fechaActual);
+    }
+
+    //Calcular dias
+    public double calcularAñosAntiguedad(String DNITrabajador) throws Exception {
+        String fecha = fechaInicioTrabajador(DNITrabajador);
+        LocalDate fechaInicio = LocalDate.parse(fecha);
+        LocalDate fechaActual = LocalDate.now();
+
+        long diasEntreFechas = ChronoUnit.DAYS.between(fechaInicio, fechaActual);
+
+        int dias = (int) diasEntreFechas;
+        double r = dias / 365;
+        if (r >= 3) {
+            r = r / saberAñosAntiguedadConvenio(DNITrabajador);
+            r = r * plusAntiguedadPercepcion(DNITrabajador);
+            return r;
+        }else{
+            return 0;
+        }
+    }
+    public double calcularFormacion(double horas, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT formacion FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
+        else return -1;
+    }
+
+    public double calcularMeritaje(double horas, double horasFM, String DNITrabajador) throws Exception {
+        return salarioBase(DNITrabajador) + calcularHorasExtra(horas, DNITrabajador) + calcularHorasExtrafm(horasFM, DNITrabajador) + calcularAñosAntiguedad(DNITrabajador);
+
+    }
+
+    public double calcularIrpf(double horas, double horasFM, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT irpf FROM Trabajador WHERE DNI_Trabajador = '" + DNITrabajador + "'");
+        if (r.next()) return (r.getInt(1) * calcularMeritaje(horas, horasFM, DNITrabajador) / 100);
+        else return -1;
+    }
+    public double salarioBaseMasHorasExtra(double horas, String DNITrabajador) throws Exception {
+        return salarioBase(DNITrabajador) + calcularHorasExtra(horas, DNITrabajador);
+    }
+
+    public double contingenciasComunes(String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT contingencias_comunes FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1) * salarioBase(DNITrabajador) / 100);
+        else return -1;
+
+    }
+
+    public double calcularDesempleo(double horas, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet rs1 = update.executeQuery("SELECT Desempleo FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (rs1.next()) return (rs1.getDouble(1) * salarioBaseMasHorasExtra(horas, DNITrabajador) / 100);
+        else return -1;
+    }
+
+    //Deducciones
+    public double deduccionHorasExtra(double horas, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT horas_extra FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (r.next()) return (r.getInt(1) * calcularHorasExtra(horas, DNITrabajador) / 100);
+        else return -1;
+    }
+
+    public double deduccionHorasExtraFM(double horas, String DNITrabajador) throws Exception {
+
+        Statement update = conn.createStatement();
+        ResultSet r = update.executeQuery("SELECT horas_extra_fm FROM Deducciones WHERE idConvenio = '" + saberidconTra(DNITrabajador) + "'");
+        if (r.next()) return (r.getInt(1) * calcularHorasExtrafm(horas, DNITrabajador) / 100);
+        else return -1;
+    }
+
+    public double aportaciones(double horas, double horasFM, String DNITrabajador) throws Exception {
+        return contingenciasComunes(DNITrabajador) + calcularDesempleo(horas, DNITrabajador) + calcularFormacion(horas, DNITrabajador) + deduccionHorasExtraFM(horasFM, DNITrabajador) + deduccionHorasExtra(horas, DNITrabajador);
+    }
+
+    public double totalDeducciones(double horas, double horasFM, String DNITrabajador) throws Exception {
+        DecimalFormat formato = new DecimalFormat("0.00");
+        double r = aportaciones(horas, horasFM, DNITrabajador) + calcularIrpf(horas, horasFM, DNITrabajador);
+        double redondeado = Math.round(r * 100.0) / 100.0;
+        return redondeado;
+    }
+
+    //Salario Final
+    public double importeLiquidoFinal(double horas, double horasFM, String DNITrabajador) throws Exception {
+        double r = calcularMeritaje(horas, horasFM, DNITrabajador) - totalDeducciones(horas, horasFM, DNITrabajador);
+        double redondeado = Math.round(r * 100.0) / 100.0;
+        return redondeado;
+    }
+
+
+    //Insertar en nomina
+    public void insertarNomina(double horas, double horasfm, String DNITrabajador) throws Exception {
+        Statement update = conn.createStatement();
+        String valors = obtenerNuevoIDNomina() + ", '" + calcularHorasExtra(horas, DNITrabajador) + "', '" + calcularHorasExtrafm(horasfm, DNITrabajador) + "','" + calcularAñosAntiguedad(DNITrabajador) + "','" +
+                calcularIrpf(horas, horasfm, DNITrabajador) + "','" + calcularFormacion(horas, DNITrabajador) + "','" + calcularDesempleo(horas, DNITrabajador) + "','" +
+                deduccionHorasExtra(horas, DNITrabajador) + "','" + deduccionHorasExtraFM(horasfm, DNITrabajador) + "','" + contingenciasComunes(DNITrabajador) + "','" +
+                saberSalarioBase(DNITrabajador) + "','" + calcularMeritaje(horas, horasfm, DNITrabajador) + "','" + importeLiquidoFinal(horas, horasfm, DNITrabajador) + "','" + saberidconTra(DNITrabajador) + "','" + saberDniTra(DNITrabajador) + "','" +
+                saberFechaActual() + "','" + salarioBaseMasHorasExtra(horas, DNITrabajador) + "','" + selectTrabajadorPorDNI(DNITrabajador) + "','" + selectApellidoPorDNI(DNITrabajador) + "','" + selectPuestoPorDNI(DNITrabajador) + "'";
+        update.executeUpdate("INSERT INTO Nominas VALUES(" + valors + ")");
+    }
 }

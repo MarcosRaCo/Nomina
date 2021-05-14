@@ -182,9 +182,6 @@ public class VentanaVerNomina extends JFrame {
                     String nombreFichero = "nomina_"+ textFieldDni.getText()+"_"+textFieldFA.getText() + ".xml";
                     File file = new File(path + nombreFichero);
 
-                    /* This logic will make sure that the file
-                     * gets created if it is not present at the
-                     * specified location*/
                     if (!file.exists()) {
                         file.createNewFile();
                     }
@@ -192,7 +189,7 @@ public class VentanaVerNomina extends JFrame {
                     FileWriter fw = new FileWriter(file);
                     bw = new BufferedWriter(fw);
                     bw.write(mycontent);
-                    System.out.println("File written Successfully");
+                    System.out.println("XML generado correctamente");
 
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
@@ -201,7 +198,7 @@ public class VentanaVerNomina extends JFrame {
                         if (bw != null)
                             bw.close();
                     } catch (Exception ex) {
-                        System.out.println("Error in closing the BufferedWriter" + ex);
+                        System.out.println("Error al cerrar writter" + ex);
                     }
                 }
             }
@@ -212,7 +209,7 @@ public class VentanaVerNomina extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Connection conn = Conexion.getConnection();
-                    String reportSrcFile = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\src\\jasperReports\\nominasMarcosMiguel.jrxml";
+                    String reportSrcFile = "src\\jasperReports\\nominasMarcosMiguel.jrxml";
 
                     JasperReport jasperReport = null;
                     jasperReport = JasperCompileManager.compileReport(reportSrcFile);
@@ -236,12 +233,5 @@ public class VentanaVerNomina extends JFrame {
         vvn.pack();
         vvn.setVisible(true);
     }
-//    public static void main(String[] args) throws Exception {
-//        VentanaVerNomina vvn = new VentanaVerNomina();
-//        vvn.setContentPane(new VentanaVerNomina().panelVerNomina);
-//        vvn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        vvn.pack();
-//        vvn.setVisible(true);
-//
-//    }
+
 }

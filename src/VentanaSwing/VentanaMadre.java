@@ -17,19 +17,11 @@ import java.sql.SQLException;
 public class VentanaMadre extends JFrame {
     private JPanel panelMadre;
     private JButton insertarTrabajadorButton;
-    private JButton consultarButton;
     private JButton calcularNominasButton;
 
     public VentanaMadre() {
         setLocationRelativeTo(null);
         setResizable(false);
-        consultarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VentanaConsulta vc = new VentanaConsulta();
-                vc.NewWindowsConsulta();
-            }
-        });
         insertarTrabajadorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
