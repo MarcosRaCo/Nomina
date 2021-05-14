@@ -11,49 +11,60 @@ import java.sql.Date;
  * Description:
  **/
 public class Nominas {
-    private int idNomina;
-    private double salarioFinal;
-    private double horasExtra;
-    private double horasExtraFM;
-    private double plusAntiguedad;
-    private double gratificacionesExtra;
-    private double irpf;
+
+    public int idNomina;
+    private double horas_extra ;
+    private double horas_extra_fm ;
+    private double plus_antiguedad;
+    private double irpf ;
     private double formacion;
-    private double desempleo;
+    private double desempleo ;
     private double deduc_horas_extra;
     private double deduc_horas_extraFM;
     private double contingencias_comunes;
-    private double totalMerital;
-    private Date fechaActual;
+    private double salari_base;
+    private double total_merital;
+    private double salario_final;
     private int idConvenio;
-    private int dniTrabajador;
-    private int cifEpresa;
+    private String DNItrabajdor;
+    private Date fecha_actual;
+    private double salarioBaseMasHoraExtra;
+    private String nombreT ;
+    private String apellidoT;
+    private String puestoT;
+
+
+
+
     public Nominas() {
 
     }
 
-    public Nominas(int dniTrabajador) {
-        this.dniTrabajador = dniTrabajador;
+    public Nominas(String DNItrabajdor) {
+        this.DNItrabajdor = DNItrabajdor;
     }
 
-    public Nominas(int idNomina, double salarioFinal, double horasExtra, double horasExtraFM, double plusAntiguedad, double gratificacionesExtra, double irpf, double formacion, double desempleo, double deduc_horas_extra, double deduc_horas_extraFM, double contingencias_comunes, double totalMerital, Date fechaActual, int idConvenio, int dniTrabajador, int cifEpresa) {
+    public Nominas(int idNomina, double horas_extra, double horas_extra_fm, double plus_antiguedad, double irpf, double formacion, double desempleo, double deduc_horas_extra, double deduc_horas_extraFM, double contingencias_comunes, double salari_base, double total_merital, double salario_final, int idConvenio, String DNItrabajdor, Date fecha_actual, double salarioBaseMasHoraExtra, String nombreT, String apellidoT, String puestoT) {
         this.idNomina = idNomina;
-        this.salarioFinal = salarioFinal;
-        this.horasExtra = horasExtra;
-        this.horasExtraFM = horasExtraFM;
-        this.plusAntiguedad = plusAntiguedad;
-        this.gratificacionesExtra = gratificacionesExtra;
+        this.horas_extra = horas_extra;
+        this.horas_extra_fm = horas_extra_fm;
+        this.plus_antiguedad = plus_antiguedad;
         this.irpf = irpf;
         this.formacion = formacion;
         this.desempleo = desempleo;
         this.deduc_horas_extra = deduc_horas_extra;
         this.deduc_horas_extraFM = deduc_horas_extraFM;
         this.contingencias_comunes = contingencias_comunes;
-        this.totalMerital = totalMerital;
-        this.fechaActual = fechaActual;
+        this.salari_base = salari_base;
+        this.total_merital = total_merital;
+        this.salario_final = salario_final;
         this.idConvenio = idConvenio;
-        this.dniTrabajador = dniTrabajador;
-        this.cifEpresa = cifEpresa;
+        this.DNItrabajdor = DNItrabajdor;
+        this.fecha_actual = fecha_actual;
+        this.salarioBaseMasHoraExtra = salarioBaseMasHoraExtra;
+        this.nombreT = nombreT;
+        this.apellidoT = apellidoT;
+        this.puestoT = puestoT;
     }
 
     public int getIdNomina() {
@@ -64,44 +75,28 @@ public class Nominas {
         this.idNomina = idNomina;
     }
 
-    public double getSalarioFinal() {
-        return salarioFinal;
+    public double getHoras_extra() {
+        return horas_extra;
     }
 
-    public void setSalarioFinal(double salarioFinal) {
-        this.salarioFinal = salarioFinal;
+    public void setHoras_extra(double horas_extra) {
+        this.horas_extra = horas_extra;
     }
 
-    public double getHorasExtra() {
-        return horasExtra;
+    public double getHoras_extra_fm() {
+        return horas_extra_fm;
     }
 
-    public void setHorasExtra(double horasExtra) {
-        this.horasExtra = horasExtra;
+    public void setHoras_extra_fm(double horas_extra_fm) {
+        this.horas_extra_fm = horas_extra_fm;
     }
 
-    public double getHorasExtraFM() {
-        return horasExtraFM;
+    public double getPlus_antiguedad() {
+        return plus_antiguedad;
     }
 
-    public void setHorasExtraFM(double horasExtraFM) {
-        this.horasExtraFM = horasExtraFM;
-    }
-
-    public double getPlusAntiguedad() {
-        return plusAntiguedad;
-    }
-
-    public void setPlusAntiguedad(double plusAntiguedad) {
-        this.plusAntiguedad = plusAntiguedad;
-    }
-
-    public double getGratificacionesExtra() {
-        return gratificacionesExtra;
-    }
-
-    public void setGratificacionesExtra(double gratificacionesExtra) {
-        this.gratificacionesExtra = gratificacionesExtra;
+    public void setPlus_antiguedad(double plus_antiguedad) {
+        this.plus_antiguedad = plus_antiguedad;
     }
 
     public double getIrpf() {
@@ -152,20 +147,28 @@ public class Nominas {
         this.contingencias_comunes = contingencias_comunes;
     }
 
-    public double getTotalMerital() {
-        return totalMerital;
+    public double getSalari_base() {
+        return salari_base;
     }
 
-    public void setTotalMerital(double totalMerital) {
-        this.totalMerital = totalMerital;
+    public void setSalari_base(double salari_base) {
+        this.salari_base = salari_base;
     }
 
-    public Date getFechaActual() {
-        return fechaActual;
+    public double getTotal_merital() {
+        return total_merital;
     }
 
-    public void setFechaActual(Date fechaActual) {
-        this.fechaActual = fechaActual;
+    public void setTotal_merital(double total_merital) {
+        this.total_merital = total_merital;
+    }
+
+    public double getSalario_final() {
+        return salario_final;
+    }
+
+    public void setSalario_final(double salario_final) {
+        this.salario_final = salario_final;
     }
 
     public int getIdConvenio() {
@@ -176,42 +179,77 @@ public class Nominas {
         this.idConvenio = idConvenio;
     }
 
-    public int getDniTrabajador() {
-        return dniTrabajador;
+    public String getDNItrabajdor() {
+        return DNItrabajdor;
     }
 
-    public void setDniTrabajador(int dniTrabajador) {
-        this.dniTrabajador = dniTrabajador;
+    public void setDNItrabajdor(String DNItrabajdor) {
+        this.DNItrabajdor = DNItrabajdor;
     }
 
-    public int getCifEpresa() {
-        return cifEpresa;
+    public Date getFecha_actual() {
+        return fecha_actual;
     }
 
-    public void setCifEpresa(int cifEpresa) {
-        this.cifEpresa = cifEpresa;
+    public void setFecha_actual(Date fecha_actual) {
+        this.fecha_actual = fecha_actual;
+    }
+
+    public double getSalarioBaseMasHoraExtra() {
+        return salarioBaseMasHoraExtra;
+    }
+
+    public void setSalarioBaseMasHoraExtra(double salarioBaseMasHoraExtra) {
+        this.salarioBaseMasHoraExtra = salarioBaseMasHoraExtra;
+    }
+
+    public String getNombreT() {
+        return nombreT;
+    }
+
+    public void setNombreT(String nombreT) {
+        this.nombreT = nombreT;
+    }
+
+    public String getApellidoT() {
+        return apellidoT;
+    }
+
+    public void setApellidoT(String apellidoT) {
+        this.apellidoT = apellidoT;
+    }
+
+    public String getPuestoT() {
+        return puestoT;
+    }
+
+    public void setPuestoT(String puestoT) {
+        this.puestoT = puestoT;
     }
 
     @Override
     public String toString() {
         return "Nominas{" +
                 "idNomina=" + idNomina +
-                ", salarioFinal=" + salarioFinal +
-                ", horasExtra=" + horasExtra +
-                ", horasExtraFM=" + horasExtraFM +
-                ", plusAntiguedad=" + plusAntiguedad +
-                ", gratificacionesExtra=" + gratificacionesExtra +
+                ", horas_extra=" + horas_extra +
+                ", horas_extra_fm=" + horas_extra_fm +
+                ", plus_antiguedad=" + plus_antiguedad +
                 ", irpf=" + irpf +
                 ", formacion=" + formacion +
                 ", desempleo=" + desempleo +
                 ", deduc_horas_extra=" + deduc_horas_extra +
                 ", deduc_horas_extraFM=" + deduc_horas_extraFM +
                 ", contingencias_comunes=" + contingencias_comunes +
-                ", totalMerital=" + totalMerital +
-                ", fechaActual=" + fechaActual +
+                ", salari_base=" + salari_base +
+                ", total_merital=" + total_merital +
+                ", salario_final=" + salario_final +
                 ", idConvenio=" + idConvenio +
-                ", dniTrabajador=" + dniTrabajador +
-                ", cifEpresa=" + cifEpresa +
+                ", DNItrabajdor='" + DNItrabajdor + '\'' +
+                ", fecha_actual=" + fecha_actual +
+                ", salarioBaseMasHoraExtra=" + salarioBaseMasHoraExtra +
+                ", nombreT='" + nombreT + '\'' +
+                ", apellidoT='" + apellidoT + '\'' +
+                ", puestoT='" + puestoT + '\'' +
                 '}';
     }
 }

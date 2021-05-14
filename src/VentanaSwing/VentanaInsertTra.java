@@ -62,7 +62,12 @@ public class VentanaInsertTra extends JFrame{
                 int convenioParse = Integer.parseInt(idConvenio);
                 double irpfParse = Double.parseDouble(irpf);
                 Date date = Date.valueOf(fechainicio);
-                Querys trabajadorquery = new Querys();
+                Querys trabajadorquery = null;
+                try {
+                    trabajadorquery = new Querys();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
                 Trabajador trabajador = new Trabajador(dni, nombre, papellido, sapellido, date, edadParse, puesto, irpfParse, convenioParse);
 
                 try {
@@ -70,6 +75,7 @@ public class VentanaInsertTra extends JFrame{
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
+
 
                 Limpiar();
             }

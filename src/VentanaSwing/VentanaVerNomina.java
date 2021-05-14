@@ -90,51 +90,55 @@ public class VentanaVerNomina extends JFrame {
         ColocarVentana();
         setResizable(false);
         Querys q = new Querys();
+        try {
+            String ssb = String.valueOf(q.selectSalarioBase());
+            String sa = String.valueOf(q.selectAntiguadad());
+            String she = String.valueOf(q.selectHorasExtra());
+            String shefm = String.valueOf(q.selectHorasExtraFM());
+            String stm = String.valueOf(q.selectTotalMerital());
+            System.out.println(dni);
+            String scg = String.valueOf(q.selectContingenciasComunes());
+            String sd = String.valueOf(q.selectDesempleo());
+            String sf = String.valueOf(q.selectFormacion());
+            String shed = String.valueOf(q.selectHorasExtraDeducciones());
+            String shedfm = String.valueOf(q.selectHorasExtraFMDeducciones());
+            String sirpf = String.valueOf(q.selectIrpf());
+            String ssf = String.valueOf(q.selectSalarioFinal());
 
-        String ssb = String.valueOf(q.selectSalarioBase());
-        String sa = String.valueOf(q.selectAntiguadad());
-        String she = String.valueOf(q.selectHorasExtra());
-        String shefm = String.valueOf(q.selectHorasExtraFM());
-        String stm = String.valueOf(q.selectTotalMerital());
-        System.out.println(dni);
-        String scg = String.valueOf(q.selectContingenciasComunes());
-        String sd = String.valueOf(q.selectDesempleo());
-        String sf = String.valueOf(q.selectFormacion());
-        String shed = String.valueOf(q.selectHorasExtraDeducciones());
-        String shedfm = String.valueOf(q.selectHorasExtraFMDeducciones());
-        String sirpf = String.valueOf(q.selectIrpf());
-        String ssf = String.valueOf(q.selectSalarioFinal());
 
+            String nt = String.valueOf(q.selectTrabajadorPorDNInomina());
 
-        String nt = String.valueOf(q.selectTrabajadorPorDNInomina());
+            String cif = String.valueOf(q.selectCif());
 
-        String cif = String.valueOf(q.selectCif());
+            String dniT = String.valueOf(q.selectDNInomina());
 
-        String dniT = String.valueOf(q.selectDNInomina());
+            String fa = String.valueOf(q.saberFechaActual());
+            String ne = String.valueOf(q.selectNombreEmpresa());
+            String ccc = String.valueOf(q.selectCcc());
+            textFieldSalarioBase.setText(ssb);
+            textFieldAntigüedad.setText(sa);
+            textFieldHExtra.setText(she);
+            textFieldHExtraFM.setText(shefm);
+            textFieldTotalMerital.setText(stm);
 
-        String fa = String.valueOf(q.saberFechaActual());
-        String ne = String.valueOf(q.selectNombreEmpresa());
-        String ccc = String.valueOf(q.selectCcc());
-        textFieldSalarioBase.setText(ssb);
-        textFieldAntigüedad.setText(sa);
-        textFieldHExtra.setText(she);
-        textFieldHExtraFM.setText(shefm);
-        textFieldTotalMerital.setText(stm);
+            textFieldContingénciasComunes.setText(scg);
+            textFieldDesempleo.setText(sd);
+            textFieldFomacion.setText(sf);
+            textFieldHExtraDeduc.setText(shed);
 
-        textFieldContingénciasComunes.setText(scg);
-        textFieldDesempleo.setText(sd);
-        textFieldFomacion.setText(sf);
-        textFieldHExtraDeduc.setText(shed);
+            textFieldHExtraFMD.setText(shedfm);
+            textFieldIRPF.setText(sirpf);
+            textFieldSalarioFinal.setText(ssf);
+            textFieldDni.setText(String.valueOf(dniT));
+            textFieldCif.setText(cif);
+            textFieldNombreT.setText(nt);
+            textFieldFA.setText(fa);
+            textFieldCcc.setText(ccc);
+            textFieldNombreEmpresa.setText(ne);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
-        textFieldHExtraFMD.setText(shedfm);
-        textFieldIRPF.setText(sirpf);
-        textFieldSalarioFinal.setText(ssf);
-        textFieldDni.setText(String.valueOf(dniT));
-        textFieldCif.setText(cif);
-        textFieldNombreT.setText(nt);
-        textFieldFA.setText(fa);
-        textFieldCcc.setText(ccc);
-        textFieldNombreEmpresa.setText(ne);
 
         exportarXMLButton.addActionListener(new ActionListener() {
             @Override
@@ -205,25 +209,25 @@ public class VentanaVerNomina extends JFrame {
 
         exportButton.addActionListener(new ActionListener() {
             @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        Connection conn = Conexion.getConnection();
-                        String reportSrcFile = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\src\\jasperReports\\nominasMarcosMiguel.jrxml";
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Connection conn = Conexion.getConnection();
+                    String reportSrcFile = "D:\\Users\\MarcosRa\\1 DAM\\PROGRAMACION\\CalcularNominas\\src\\jasperReports\\nominasMarcosMiguel.jrxml";
 
-                        JasperReport jasperReport = null;
-                        jasperReport = JasperCompileManager.compileReport(reportSrcFile);
+                    JasperReport jasperReport = null;
+                    jasperReport = JasperCompileManager.compileReport(reportSrcFile);
 
-                        Map<String, Object> parameters = new HashMap<String, Object>();
+                    Map<String, Object> parameters = new HashMap<String, Object>();
 
-                        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, conn);
 
-                        JasperViewer jw = new JasperViewer(print, false);
-                        jw.setVisible(true);
-                    }catch (JRException | SQLException jrException) {
-                        jrException.printStackTrace();
-                        System.out.println("Error");
-                    }
+                    JasperViewer jw = new JasperViewer(print, false);
+                    jw.setVisible(true);
+                }catch (JRException | SQLException jrException) {
+                    jrException.printStackTrace();
+                    System.out.println("Error");
                 }
+            }
         });
     }
     public void NewWindowsVerNomina() throws Exception {
