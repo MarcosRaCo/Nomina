@@ -96,7 +96,6 @@ public class VentanaVerNomina extends JFrame {
             String she = String.valueOf(q.selectHorasExtra());
             String shefm = String.valueOf(q.selectHorasExtraFM());
             String stm = String.valueOf(q.selectTotalMerital());
-            System.out.println(dni);
             String scg = String.valueOf(q.selectContingenciasComunes());
             String sd = String.valueOf(q.selectDesempleo());
             String sf = String.valueOf(q.selectFormacion());

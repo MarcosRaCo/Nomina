@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nominas>
+  <nomina>
+      <trabajador>
+        <nombreTrabajador>Shen</nombreTrabajador>
+        <dni>12197863M</dni>
+      </trabajador>
+      <empresa>
+        <cif>F08139712</cif>
+        <nombreEmpresa>CIDE</nombreEmpresa>
+      </empresa>
+      <percepciones>
+        <salario_base>1000.25</salario_base>
+        <antiguedad>350.0</antiguedad>
+        <horas_extra>40.0</horas_extra>
+        <horas_extraFM>50.0</horas_extraFM>
+      </percepciones>
+      <total_meritado>1440.25</total_meritado>
+      <deducciones>
+        <contingencias_comunes>50.0125</contingencias_comunes>
+        <desempleo>104.025</desempleo>
+        <formacion>52.0125</formacion>
+        <deducciones_horas_extra>4.0</deducciones_horas_extra>
+        <deducciones_horas_extraFM>6.0</deducciones_horas_extraFM>
+        <irpf>28.805</irpf>
+      </deducciones> 
+      <salario_final>1195.39</salario_final>
+  </nomina>
+</nominas>
