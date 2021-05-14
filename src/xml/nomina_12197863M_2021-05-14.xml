@@ -12,18 +12,18 @@
       <percepciones>
         <salario_base>1000.25</salario_base>
         <antiguedad>350.0</antiguedad>
-        <horas_extra>40.0</horas_extra>
-        <horas_extraFM>50.0</horas_extraFM>
+        <horas_extra>20.0</horas_extra>
+        <horas_extraFM>25.0</horas_extraFM>
       </percepciones>
-      <total_meritado>1440.25</total_meritado>
+      <total_meritado>1395.25</total_meritado>
       <deducciones>
         <contingencias_comunes>50.0125</contingencias_comunes>
-        <desempleo>104.025</desempleo>
-        <formacion>52.0125</formacion>
-        <deducciones_horas_extra>4.0</deducciones_horas_extra>
-        <deducciones_horas_extraFM>6.0</deducciones_horas_extraFM>
-        <irpf>28.805</irpf>
+        <desempleo>102.025</desempleo>
+        <formacion>51.0125</formacion>
+        <deducciones_horas_extra>2.0</deducciones_horas_extra>
+        <deducciones_horas_extraFM>3.0</deducciones_horas_extraFM>
+        <irpf>27.905</irpf>
       </deducciones> 
-      <salario_final>1195.39</salario_final>
+      <salario_final>1159.29</salario_final>
   </nomina>
 </nominas>
